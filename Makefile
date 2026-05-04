@@ -1,11 +1,13 @@
 CC = gcc
+CFLAGS = -Wall -g -m32
 
-CFLAGS = -Wall -gcc
+all: myshell
 
-all: LineParser
+#LineParser: LineParser.c
+#	$(CC) $(CFLAGS) -o LineParser LineParser.c
 
-LineParser: LineParser.c
-	$(CC) $(CFLAGS) -o LineParser LineParser.c
+myshell: myshell.c
+	$(CC) $(CFLAGS) -o myshell myshell.c LineParser.c
 
 clean:
-	rm -f LineParser
+	rm -f myshell
