@@ -6,10 +6,18 @@
 #include <string.h>
 
 
-void execute(cmdLine *pCmdLine){
-    execvp(pCmdLine->arguments[0], pCmdLine->arguments);
-    perror("Error executing command");
-    _exit(1);
+
+void execute(cmdLine* pCmdLine){
+    pid_t pid = fork();
+    fprintf(stderr, "PID is: %d\n", pid);
+    fprintf(stderr, "Executing program file name is: %s\n", pCmdLine -> arguments[0]);
+    fprintf(stderr, "Foreground or backgound is: %d\n", pCmdLine -> blocking);
+    if(!pid){
+        execvp(pCmdLine->arguments[0], pCmdLine->arguments);
+        perror("Error executing command");
+        _exit(1);
+    }
+    //wait_for_child(pid);
 }
 
 int main(int argc, char **argv)
