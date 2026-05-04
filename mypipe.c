@@ -7,6 +7,11 @@
 
 
 int main(int argc, char** argv){
+    if (argc < 2) {
+        fprintf(stderr, "Missing message to print\n");
+        exit(1);
+    }
+
     int pipefd[2];
 
     if(pipe(pipefd)==-1){
@@ -30,6 +35,7 @@ int main(int argc, char** argv){
         printf("Child received: %s\n", buffer);
 
         close(pipefd[0]);
+        close(pipefd[1]);
         exit(0);
     }
     return 0;
