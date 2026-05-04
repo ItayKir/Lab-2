@@ -16,7 +16,7 @@ void execute(cmdLine* pCmdLine){
     }
     else if(pid==0){
         execvp(pCmdLine->arguments[0], pCmdLine->arguments);
-        perror("Error executing command");
+        fprintf(stderr, "Error executing command");
         _exit(1);
     }
     else{
@@ -42,6 +42,15 @@ int main(int argc, char **argv)
         }
         if(strcmp(pCmdLine -> arguments[0], "quit")==0){
             b=0;
+        }
+        else if(strcmp(pCmdLine -> arguments[0], "cd")==0){
+            if(pCmdLine -> argCount < 2){
+                fprintf(stderr, "Missing directory to change to!");
+                continue;
+            }
+            if(chdir(pCmdLine -> arguments[1])!=0){
+                fprintf(stderr, "Failed to execute cd!")
+            }
         }
         else{
             execute(pCmdLine);
