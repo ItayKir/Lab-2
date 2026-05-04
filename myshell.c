@@ -5,7 +5,7 @@
 #include "LineParser.h"
 #include <string.h>
 #include <sys/wait.h>
-
+#include <fcntl.h>
 
 void execute(cmdLine* pCmdLine){
     pid_t pid = fork();
@@ -15,6 +15,20 @@ void execute(cmdLine* pCmdLine){
         return; 
     }
     else if(pid==0){
+        if(pCmdLine->inputRedirect != NULL){
+            close(0);
+            if (open(pCmdLine->inputRedirect, O_RDONLY) == -1) {    
+                perror("Error opening input file");
+                _exit(1);
+            }
+        }
+        if(pCmdLine->outputRedirect != NULL){
+            close(1);
+            if (open(pCmdLine->outputRedirect, O_WRONLY | O_CREAT , 0644) == -1) {
+                perror("Error opening output file");
+                _exit(1);
+            }
+        }
         execvp(pCmdLine->arguments[0], pCmdLine->arguments);
         fprintf(stderr, "Error executing command\n");
         _exit(1);

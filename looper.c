@@ -19,6 +19,7 @@ void handler(int sig)
 	raise(sig);
 	if (sig == SIGTSTP) {
 		signal(SIGCONT, handler); 
+		signal(SIGTSTP, handler);
 	}
 	else if (sig == SIGCONT) {
 		signal(SIGTSTP, handler);
