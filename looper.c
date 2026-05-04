@@ -17,6 +17,12 @@ void handler(int sig)
 	}
 	signal(sig, SIG_DFL);
 	raise(sig);
+	if (sig == SIGTSTP) {
+		signal(SIGCONT, handler); 
+	}
+	else if (sig == SIGCONT) {
+		signal(SIGTSTP, handler);
+	}
 }
 
 int main(int argc, char **argv)
