@@ -16,17 +16,17 @@ void execute(cmdLine* pCmdLine){
     }
     else if(pid==0){
         execvp(pCmdLine->arguments[0], pCmdLine->arguments);
-        fprintf(stderr, "Error executing command");
+        fprintf(stderr, "Error executing command\n");
         _exit(1);
     }
     else{
         fprintf(stderr, "PID is: %d\n", pid);
         fprintf(stderr, "Executing program file name is: %s\n", pCmdLine -> arguments[0]);
         if(pCmdLine -> blocking){
-            fprintf(stderr,"Running in Backgound.\n");
+            fprintf(stderr,"Running in Foreground.\n");
         }
         else{
-            fprintf(stderr,"Running in Foreground.\n");
+            fprintf(stderr,"Running in Backgound.\n"); 
         }
         if(pCmdLine ->blocking){
             waitpid(pid, NULL, 0);
@@ -53,31 +53,31 @@ int main(int argc, char **argv)
         }
         else if(strcmp(pCmdLine -> arguments[0], "cd")==0){
             if(chdir(pCmdLine -> arguments[1])!=0){
-                fprintf(stderr, "Failed to execute cd!");
+                fprintf(stderr, "Failed to execute cd!\n");
             }
         }
-        else if(strcmp(pCmdLine -> arguments[0], "kill")==0){
+        else if(strcmp(pCmdLine -> arguments[0], "stop")==0){
             pid_t target_pid = atoi(pCmdLine -> arguments[1]);
             if(kill(target_pid, SIGSTOP)!=0){
-                fprintf(stderr, "Failed to kill PID: %d!", target_pid);
+                fprintf(stderr, "Failed to stop PID: %d!\n", target_pid);
             }
         }
         else if(strcmp(pCmdLine -> arguments[0], "wakeup")==0){
             pid_t target_pid = atoi(pCmdLine -> arguments[1]);
             if(kill(target_pid, SIGCONT)!=0){
-                fprintf(stderr, "Failed to wakeup PID: %d!", target_pid);
+                fprintf(stderr, "Failed to wakeup PID: %d!\n", target_pid);
             }
         }
         else if(strcmp(pCmdLine -> arguments[0], "ice")==0){
             pid_t target_pid = atoi(pCmdLine -> arguments[1]);
             if(kill(target_pid, SIGINT)!=0){
-                fprintf(stderr, "Failed to ice PID: %d!", target_pid);
+                fprintf(stderr, "Failed to ice PID: %d!\n", target_pid);
             }
         }
         else if(strcmp(pCmdLine -> arguments[0], "nuke")==0){
             pid_t target_pid = atoi(pCmdLine -> arguments[1]);
-            if(kill(-target_pid, SIGSTOP)!=0){
-                fprintf(stderr, "Failed to nuke PID: %d!", target_pid);
+            if(kill(-target_pid, SIGKILL)!=0){
+                fprintf(stderr, "Failed to nuke PID: %d!\n", target_pid);
             }
         }
         else{
